@@ -33,10 +33,12 @@ app.get("/api/hello", function (req, res) {
 app.get("/api/:date?", function (req, res) {
   reqDate = req.params.date;
 
-  if(reqDate[4] == "-")
+  if(!isNaN(Date.parse(reqDate)))
   print = dateFinderS(reqDate);
-  else
+  else if(/\d{5,}/.test(reqDate))
   print = dateFinderI(reqDate);
+  else
+  print = {error: "Invalid Date"}
 
   res.json(print);
 });
@@ -45,17 +47,14 @@ app.get("/api/:date?", function (req, res) {
 
 dateFinderS = (dateStr) => {
   date = new Date(dateStr);
-  console.log(date);
-  if(date == "Invalid Date") return {error: "Invalid Date"}
   return {unix: date.getTime(), utc: date.toUTCString()};
 }
 dateFinderI = (dateStr) => {
   date = new Date(parseInt(dateStr));
-  if(date == "Invalid Date") return {error: "Invalid Date"}
   return {unix: date.getTime(), utc: date.toUTCString()};
 }
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT || 3000 , function () {
+var listener = app.listen(process.env.PORT , function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
