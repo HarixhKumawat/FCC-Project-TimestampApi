@@ -21,7 +21,7 @@ app.get("/", function (req, res) {
 //accepting empty date parameter!
 app.get("/api", function (req, res) {
   date = new Date();
-  res.json([{unix: Date.now(), utc: date.toUTCString()}]);
+  res.json({unix: Date.now(), utc: date.toUTCString()});
 });
 
 // your first API endpoint... 
@@ -30,7 +30,7 @@ app.get("/api/hello", function (req, res) {
   console.log("welcome to our api :)  ")
 });
 
-app.get("/api/:date", function (req, res) {
+app.get("/api/:date?", function (req, res) {
   reqDate = req.params.date;
 
   if(reqDate[4] == "-")
@@ -39,9 +39,6 @@ app.get("/api/:date", function (req, res) {
   print = dateFinderI(reqDate);
 
   res.json(print);
-  /* 
-  date = new Date(reqDate);
-  res.json([{unix: date.getTime(), utc: date.toUTCString()}]); */
 });
 
 
@@ -50,12 +47,12 @@ dateFinderS = (dateStr) => {
   date = new Date(dateStr);
   console.log(date);
   if(date == "Invalid Date") return {error: "Invalid Date"}
-  return [{unix: date.getTime(), utc: date.toUTCString()}];
+  return {unix: date.getTime(), utc: date.toUTCString()};
 }
 dateFinderI = (dateStr) => {
   date = new Date(parseInt(dateStr));
   if(date == "Invalid Date") return {error: "Invalid Date"}
-  return [{unix: date.getTime(), utc: date.toUTCString()}];
+  return {unix: date.getTime(), utc: date.toUTCString()};
 }
 
 // listen for requests :)
